@@ -15,14 +15,14 @@ public class PetStoreApiClient {
 
     public JSONArray getPetsByStatus(PetStatus status) {
         JSONArray jsonArray;
-        Response response = given().param("status", status.getDescription()).when().get(uri);
+        Response response = given().param("status", status.getStatus()).when().get(uri);
         if (response.statusCode() != 200) {
             log.info("PetStore API request not successful. Response Code: " + response.statusCode());
             log.info("Response being generated from __files/pets.json ");
             JsonParser jsonParser = new JsonParser();
             JsonFilters jsonFilters = new JsonFilters();
             jsonArray = jsonFilters
-                    .filterPetsByStatus(status.getDescription(), jsonParser.setJSON("__files/pets.json"));
+                    .filterPetsByStatus(status.getStatus(), jsonParser.setJSON("__files/pets.json"));
         } else {
             jsonArray = new JSONArray(response.getBody().asString());
         }

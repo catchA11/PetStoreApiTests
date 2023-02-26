@@ -10,19 +10,17 @@ public enum  PetStatus {
     SOLD("sold"),
     PENDING("pending");
 
-    private final String description;
-
+    private final String status;
     PetStatus(String description) {
-        this.description = description;
+        this.status = description;
     }
-
-    public String getDescription() {
-        return description;
+    public String getStatus() {
+        return status;
     }
 
     private static final Map<String, PetStatus> LOOKUP = Maps.uniqueIndex(
             Arrays.asList(PetStatus.values()),
-            bookingFormat -> bookingFormat != null ? bookingFormat.getDescription() : null
+            petStatus -> petStatus != null ? petStatus.getStatus() : null
     );
 
     public static PetStatus fromDescription(String description) {

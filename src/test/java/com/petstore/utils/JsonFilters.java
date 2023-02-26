@@ -27,7 +27,7 @@ public class JsonFilters {
                     filteredArray.put(petObject);
                 }
             } catch (JSONException e) {
-                log.warn("field :" + field + " not found for pet: " + petObject.toString());
+                log.info("field :" + field + " not found for pet: " + petObject.toString());
             }
         }
         return filteredArray;
