@@ -38,8 +38,7 @@ public class PetStoreApiClient {
             throw new IllegalStateException("get pet by id: " + id.toString() + " request failed. Response status: "
                     + response.getStatusLine());
         }
-        JSONObject responseBody = new JSONObject(response.getBody().asString());
-        return responseBody;
+        return new JSONObject(response.getBody().asString());
     }
 
     public JSONObject postNewPet(String type, PetStatus status) {

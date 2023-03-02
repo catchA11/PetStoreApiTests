@@ -52,14 +52,24 @@ public class JsonParser {
             jsonTokener = new JSONTokener(inputStream);
         }
         JSONObject jsonObject = new JSONObject(Objects.requireNonNull(jsonTokener));
-        jsonObject.remove("status");
-        jsonObject.put("status", status);
-        jsonObject.remove("name");
-        jsonObject.put("name", type);
-        jsonObject.remove("id");
-        Random random = new Random();
-        int number = random.nextInt(999999);
-        jsonObject.put("id", number);
+        setJsonField("status", status, jsonObject);
+        setJsonField("name", type, jsonObject);
+        setJsonId(getRandomNumber(), jsonObject);
         return jsonObject;
+    }
+
+    private void setJsonField(String field, String value, JSONObject jsonObject) {
+        jsonObject.remove(field);
+        jsonObject.put(field, value);
+    }
+
+    private void setJsonId(int value, JSONObject jsonObject) {
+        jsonObject.remove("id");
+        jsonObject.put("id", value);
+    }
+
+    private int getRandomNumber() {
+        Random random = new Random();
+        return random.nextInt(999999);
     }
 }

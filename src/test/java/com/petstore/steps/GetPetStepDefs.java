@@ -40,12 +40,12 @@ public class GetPetStepDefs {
 
     @Then("the new pet is correctly listed in the pet store")
     public void verifyPetIsListedInPetStore() throws JsonProcessingException {
-        JSONObject expectedPet = world.getPetObject();
-        JSONObject actualPet = petStoreApiClient.getPetById((Integer) expectedPet.get("id"));
+        JSONObject expectedPetObject = world.getPetObject();
+        JSONObject actualPetObject = petStoreApiClient.getPetById((Integer) expectedPetObject.get("id"));
         ObjectMapper objectMapper = new ObjectMapper();
-        JsonNode expected = objectMapper.readTree(expectedPet.toString());
-        JsonNode actual = objectMapper.readTree(actualPet.toString());
-        assertThat(actual).withFailMessage("Expected pet object: " + expectedPet.toString()
-        + " Actual pet object: " + actualPet).isEqualTo(expected);
+        JsonNode expectedPet = objectMapper.readTree(expectedPetObject.toString());
+        JsonNode actualPet = objectMapper.readTree(actualPetObject.toString());
+        assertThat(actualPet).withFailMessage("Expected pet object: " + expectedPetObject.toString()
+        + " Actual pet object: " + actualPetObject).isEqualTo(expectedPet);
     }
 }
