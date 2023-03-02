@@ -3,6 +3,7 @@ package com.petstore.clients;
 import com.petstore.enums.PetStatus;
 import io.restassured.response.Response;
 import org.json.JSONArray;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.petstore.utils.JsonFilters;
@@ -11,12 +12,14 @@ import static io.restassured.RestAssured.given;
 
 public class PetStoreApiClient {
     private static final Logger log = LoggerFactory.getLogger(PetStoreApiClient.class);
-    private final static String uri = "https://petstore.swagger.io/v2/pet/findByStatus";
+    private static final String BASE_URL = "https://petstore.swagger.io/v2/pet";
+    private final static String FIND_BY_STATUS = "/findByStatus";
+
 
     public JSONArray getPetsByStatus(PetStatus status) {
         JSONArray jsonArray;
-        Response response = given().param("status", status.getStatus()).when().get(uri);
-        if (response.statusCode() != 200) {
+        Response response = given().param("status", status.getStatus()).when().get(BASE_URL + FIND_BY_STATUS);
+        if (response.statusCode() == 200) {
             log.info("PetStore API request not successful. Response Code: " + response.statusCode());
             log.info("Response being generated from __files/pets.json ");
             JsonParser jsonParser = new JsonParser();
@@ -27,5 +30,29 @@ public class PetStoreApiClient {
             jsonArray = new JSONArray(response.getBody().asString());
         }
         return jsonArray;
+    }
+
+    public JSONObject getPetById(Integer id) {
+        Response response = given().when().get(BASE_URL + "/" + id);
+        if (response.statusCode() != 200){
+            throw new IllegalStateException("get pet by id: " + id.toString() + " request failed. Response status: "
+                    + response.getStatusLine());
+        }
+        JSONObject responseBody = new JSONObject(response.getBody().asString());
+        return responseBody;
+    }
+
+    public JSONObject postNewPet(String type, PetStatus status) {
+        JsonParser jsonParser = new JsonParser();
+        JSONObject newPet = jsonParser.getPetObject(type, status.getStatus());
+        Response response = given()
+                .header("Content-Type","application/json" )
+                .header("Accept","application/json" )
+                .body(newPet.toString()).when()
+                .post(BASE_URL);
+        if (response.statusCode() != 200){
+            throw new IllegalStateException("post pet request failed. Response status: " + response.getStatusLine());
+        }
+        return newPet;
     }
 }
