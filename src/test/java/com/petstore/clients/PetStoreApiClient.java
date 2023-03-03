@@ -51,7 +51,7 @@ public class PetStoreApiClient {
                 .body(newPet.toString()).when()
                 .post(BASE_URL);
         if (response.statusCode() != ResponseCodes.OK.getCode()) {
-            throw new IllegalStateException("post pet request failed. Response status: " + response.getStatusLine());
+            throw new IllegalStateException("Post pet request failed. Response status: " + response.getStatusLine());
         }
         return newPet;
     }
@@ -66,5 +66,19 @@ public class PetStoreApiClient {
 
     public Response getPetById(String id) {
         return given().when().get(BASE_URL + "/" + id);
+    }
+
+    public Response updatePetStatus(JSONObject pet, String newStatus) {
+        JsonParser jsonParser = new JsonParser();
+        JSONObject updatedPet = jsonParser.updateStatus(pet, newStatus);
+        Response response = given()
+                .header("Content-Type", "application/json")
+                .header("Accept", "application/json")
+                .body(updatedPet.toString()).when()
+                .post(BASE_URL);
+        if (response.statusCode() != ResponseCodes.OK.getCode()) {
+            throw new IllegalStateException("Put pet request failed. Response status: " + response.getStatusLine());
+        }
+        return response;
     }
 }

@@ -58,6 +58,11 @@ public class JsonParser {
         return jsonObject;
     }
 
+    public JSONObject updateStatus(JSONObject pet, String newStatus) {
+        setJsonField("status", newStatus, pet);
+        return pet;
+    }
+
     private void setJsonField(String field, String value, JSONObject jsonObject) {
         jsonObject.remove(field);
         jsonObject.put(field, value);

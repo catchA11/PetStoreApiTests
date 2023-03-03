@@ -65,4 +65,12 @@ public class GetPetStepDefs {
         Response response = petStoreApiClient.getPetById(world.getPetObject().get("id").toString());
         responseVerifications.verifyResponseCodeAndStatus(response, ResponseCodes.NOT_FOUND);
     }
+
+    @Then("the new pet status is (.*)")
+    public void verifyPetStatus(PetStatus expectedPetStatus) {
+        JSONObject actualPetObject = petStoreApiClient.getPetById((Integer) world.getPetObject().get("id"));
+        assertThat(actualPetObject.get("status"))
+                .withFailMessage("Expected pet status: " + expectedPetStatus.getStatus()
+                + " Actual pet status: " + actualPetObject.get("status")).isEqualTo(expectedPetStatus.getStatus());
+    }
 }
