@@ -1,6 +1,7 @@
 package com.petstore.clients;
 
 import com.petstore.enums.PetStatus;
+import com.petstore.enums.ResponseCodes;
 import io.restassured.response.Response;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -19,7 +20,7 @@ public class PetStoreApiClient {
     public JSONArray getPetsByStatus(PetStatus status) {
         JSONArray jsonArray;
         Response response = given().param("status", status.getStatus()).when().get(BASE_URL + FIND_BY_STATUS);
-        if (response.statusCode() == 200) {
+        if (response.statusCode() == ResponseCodes.OK.getCode()) {
             log.info("PetStore API request not successful. Response Code: " + response.statusCode());
             log.info("Response being generated from __files/pets.json ");
             JsonParser jsonParser = new JsonParser();
@@ -34,8 +35,8 @@ public class PetStoreApiClient {
 
     public JSONObject getPetById(Integer id) {
         Response response = given().when().get(BASE_URL + "/" + id);
-        if (response.statusCode() != 200) {
-            throw new IllegalStateException("get pet by id: " + id.toString() + " request failed. Response status: "
+        if (response.statusCode() != ResponseCodes.OK.getCode()) {
+            throw new IllegalStateException("Get pet by id: " + id.toString() + " request failed. Response status: "
                     + response.getStatusLine());
         }
         return new JSONObject(response.getBody().asString());
@@ -49,7 +50,7 @@ public class PetStoreApiClient {
                 .header("Accept", "application/json")
                 .body(newPet.toString()).when()
                 .post(BASE_URL);
-        if (response.statusCode() != 200) {
+        if (response.statusCode() != ResponseCodes.OK.getCode()) {
             throw new IllegalStateException("post pet request failed. Response status: " + response.getStatusLine());
         }
         return newPet;
@@ -57,7 +58,7 @@ public class PetStoreApiClient {
 
     public void deletePetById(Object id) {
         Response response = given().when().delete(BASE_URL + "/" + id);
-        if (response.statusCode() != 200) {
+        if (response.statusCode() != ResponseCodes.OK.getCode()) {
             throw new IllegalStateException("Delete pet by id: " + id.toString() + " request failed. Response status: "
                     + response.getStatusLine());
         }

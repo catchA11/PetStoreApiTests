@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.petstore.World;
+import com.petstore.enums.ResponseCodes;
 import com.petstore.verifications.ResponseVerifications;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -62,6 +63,6 @@ public class GetPetStepDefs {
     @Then("the pet is not listed in the pet store")
     public void verifyPetIsNotListedInThePetStore() {
         Response response = petStoreApiClient.getPetById(world.getPetObject().get("id").toString());
-        responseVerifications.verifyResponseCodeAndStatus(response, 404, "Not Found");
+        responseVerifications.verifyResponseCodeAndStatus(response, ResponseCodes.NOT_FOUND);
     }
 }
