@@ -34,7 +34,7 @@ public class PetStoreApiClient {
 
     public JSONObject getPetById(Integer id) {
         Response response = given().when().get(BASE_URL + "/" + id);
-        if (response.statusCode() != 200){
+        if (response.statusCode() != 200) {
             throw new IllegalStateException("get pet by id: " + id.toString() + " request failed. Response status: "
                     + response.getStatusLine());
         }
@@ -45,13 +45,25 @@ public class PetStoreApiClient {
         JsonParser jsonParser = new JsonParser();
         JSONObject newPet = jsonParser.getPetObject(type, status.getStatus());
         Response response = given()
-                .header("Content-Type","application/json" )
-                .header("Accept","application/json" )
+                .header("Content-Type", "application/json")
+                .header("Accept", "application/json")
                 .body(newPet.toString()).when()
                 .post(BASE_URL);
-        if (response.statusCode() != 200){
+        if (response.statusCode() != 200) {
             throw new IllegalStateException("post pet request failed. Response status: " + response.getStatusLine());
         }
         return newPet;
+    }
+
+    public void deletePetById(Object id) {
+        Response response = given().when().delete(BASE_URL + "/" + id);
+        if (response.statusCode() != 200) {
+            throw new IllegalStateException("Delete pet by id: " + id.toString() + " request failed. Response status: "
+                    + response.getStatusLine());
+        }
+    }
+
+    public Response getPetById(String id) {
+        return given().when().get(BASE_URL + "/" + id);
     }
 }

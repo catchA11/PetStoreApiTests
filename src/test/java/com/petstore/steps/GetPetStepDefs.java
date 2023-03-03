@@ -4,8 +4,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.petstore.World;
+import com.petstore.verifications.ResponseVerifications;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import io.restassured.response.Response;
 import org.json.JSONArray;
 import com.petstore.clients.PetStoreApiClient;
 import com.petstore.enums.PetStatus;
@@ -16,6 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class GetPetStepDefs {
     PetStoreApiClient petStoreApiClient = new PetStoreApiClient();
+    ResponseVerifications responseVerifications = new ResponseVerifications();
     JsonFilters jsonFilters = new JsonFilters();
     JSONArray pets;
     private final World world;
@@ -39,13 +42,26 @@ public class GetPetStepDefs {
     }
 
     @Then("the new pet is correctly listed in the pet store")
-    public void verifyPetIsListedInPetStore() throws JsonProcessingException {
+    public void verifyPetIsListedInPetStore() {
         JSONObject expectedPetObject = world.getPetObject();
         JSONObject actualPetObject = petStoreApiClient.getPetById((Integer) expectedPetObject.get("id"));
         ObjectMapper objectMapper = new ObjectMapper();
-        JsonNode expectedPet = objectMapper.readTree(expectedPetObject.toString());
-        JsonNode actualPet = objectMapper.readTree(actualPetObject.toString());
+        JsonNode expectedPet;
+        JsonNode actualPet;
+        try {
+            expectedPet = objectMapper.readTree(expectedPetObject.toString());
+            actualPet = objectMapper.readTree(actualPetObject.toString());
+        } catch (JsonProcessingException e) {
+            throw new IllegalStateException("");
+        }
+
         assertThat(actualPet).withFailMessage("Expected pet object: " + expectedPetObject.toString()
-        + " Actual pet object: " + actualPetObject).isEqualTo(expectedPet);
+                + " Actual pet object: " + actualPetObject).isEqualTo(expectedPet);
+    }
+
+    @Then("the pet is not listed in the pet store")
+    public void verifyPetIsNotListedInThePetStore() {
+        Response response = petStoreApiClient.getPetById(world.getPetObject().get("id").toString());
+        responseVerifications.verifyResponseCodeAndStatus(response, 404, "Not Found");
     }
 }
