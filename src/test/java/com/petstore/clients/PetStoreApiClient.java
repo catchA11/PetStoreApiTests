@@ -44,7 +44,7 @@ public class PetStoreApiClient {
 
     public JSONObject postNewPet(String type, PetStatus status) {
         JsonParser jsonParser = new JsonParser();
-        JSONObject newPet = jsonParser.getPetObject(type, status.getStatus());
+        JSONObject newPet = jsonParser.getNewPetObjectFromTemplate(type, status.getStatus());
         Response response = given()
                 .header("Content-Type", "application/json")
                 .header("Accept", "application/json")
@@ -71,6 +71,20 @@ public class PetStoreApiClient {
     public Response updatePetStatus(JSONObject pet, String newStatus) {
         JsonParser jsonParser = new JsonParser();
         JSONObject updatedPet = jsonParser.updateStatus(pet, newStatus);
+        Response response = given()
+                .header("Content-Type", "application/json")
+                .header("Accept", "application/json")
+                .body(updatedPet.toString()).when()
+                .post(BASE_URL);
+        if (response.statusCode() != ResponseCodes.OK.getCode()) {
+            throw new IllegalStateException("Put pet request failed. Response status: " + response.getStatusLine());
+        }
+        return response;
+    }
+
+    public Response addPetTag(JSONObject pet, String tagId, String tagName) {
+        JsonParser jsonParser = new JsonParser();
+        JSONObject updatedPet = jsonParser.addTag(pet, tagId, tagName);
         Response response = given()
                 .header("Content-Type", "application/json")
                 .header("Accept", "application/json")

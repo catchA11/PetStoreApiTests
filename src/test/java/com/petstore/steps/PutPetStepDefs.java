@@ -18,4 +18,10 @@ public class PutPetStepDefs {
         JSONObject pet = world.getPetObject();
         world.setResponse(petStoreApiClient.updatePetStatus(pet, newStatus));
     }
+
+    @When("a tag with id (.*) and name (.*) is added to the pet")
+    public void addTagToPet(String tagId, String tagName) {
+        JSONObject pet = world.getPetObject();
+        world.setResponse(petStoreApiClient.addPetTag(pet, tagId, tagName));
+    }
 }

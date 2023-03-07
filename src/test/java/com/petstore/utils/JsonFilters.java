@@ -6,6 +6,8 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Iterator;
+
 public class JsonFilters {
     private static final Logger log = LoggerFactory.getLogger(JsonFilters.class);
 
@@ -31,5 +33,19 @@ public class JsonFilters {
             }
         }
         return filteredArray;
+    }
+
+    public boolean isTagListedInPet(String expectedTagId, String expectedTagName, JSONObject actualPetObject) {
+        JSONArray actualTags =  actualPetObject.getJSONArray("tags");
+
+        for (Object actualTag : actualTags) {
+            JSONObject tag = (JSONObject) actualTag;
+            String actualTagId = tag.get("id").toString();
+            String actualTagName = tag.get("name").toString();
+            if (actualTagId.equals(expectedTagId) && actualTagName.equals(expectedTagName)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

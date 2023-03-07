@@ -18,4 +18,10 @@ public class ResponseVerifications {
                 + actualStatus).contains(expectedResponse.getStatusMessage());
         softly.assertAll();
     }
+
+    public void verifyTag(Response response, String tagId, String tagName) {
+        SoftAssertions softly = new SoftAssertions();
+
+
+    }
 }

@@ -71,6 +71,14 @@ public class GetPetStepDefs {
         JSONObject actualPetObject = petStoreApiClient.getPetById((Integer) world.getPetObject().get("id"));
         assertThat(actualPetObject.get("status"))
                 .withFailMessage("Expected pet status: " + expectedPetStatus.getStatus()
-                + " Actual pet status: " + actualPetObject.get("status")).isEqualTo(expectedPetStatus.getStatus());
+                        + " Actual pet status: " + actualPetObject.get("status")).isEqualTo(expectedPetStatus.getStatus());
+    }
+
+    @Then("the pet is updated wih a tag with id (.*) and name (.*)")
+    public void verifyPetHasTag(String tagId, String tagName) {
+        JSONObject actualPetObject = petStoreApiClient.getPetById((Integer) world.getPetObject().get("id"));
+        boolean isTagFound = jsonFilters.isTagListedInPet(tagId, tagName, actualPetObject);
+        assertThat(isTagFound).withFailMessage("Tag with id: " + tagId + " and name: " + tagName
+                + " was not found in pet with id " + world.getPetObject().get("id")).isTrue();
     }
 }

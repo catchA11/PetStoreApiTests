@@ -35,7 +35,7 @@ public class JsonParser {
         return jsonArray;
     }
 
-    public JSONObject getPetObject(String type, String status) {
+    public JSONObject getNewPetObjectFromTemplate(String type, String status) {
         File jsonFile = new File(System.getProperty("user.dir")
                 + "/src/test/resources/__files/PetTemplate.json");
         InputStream inputStream = null;
@@ -76,5 +76,16 @@ public class JsonParser {
     private int getRandomNumber() {
         Random random = new Random();
         return random.nextInt(999999);
+    }
+
+    public JSONObject addTag(JSONObject pet, String tagId, String tagName) {
+        JSONObject tag = new JSONObject();
+        tag.put("id", tagId);
+        tag.put("name", tagName);
+        JSONArray tags = pet.getJSONArray("tags");
+        tags.put(tag);
+        pet.remove("tags");
+        pet.put("tags", tags);
+        return pet;
     }
 }
