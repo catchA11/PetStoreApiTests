@@ -1,21 +1,17 @@
 package com.petstore.steps;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import static org.assertj.core.api.Assertions.assertThat;
 import com.petstore.World;
+import com.petstore.clients.PetStoreApiClient;
+import com.petstore.enums.PetStatus;
 import com.petstore.enums.ResponseCodes;
+import com.petstore.utils.JsonFilters;
 import com.petstore.verifications.ResponseVerifications;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import io.restassured.response.Response;
 import org.json.JSONArray;
-import com.petstore.clients.PetStoreApiClient;
-import com.petstore.enums.PetStatus;
-import com.petstore.utils.JsonFilters;
 import org.json.JSONObject;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 public class GetPetStepDefs {
     PetStoreApiClient petStoreApiClient = new PetStoreApiClient();
@@ -44,20 +40,12 @@ public class GetPetStepDefs {
 
     @Then("the new pet is correctly listed in the pet store")
     public void verifyPetIsListedInPetStore() {
-        JSONObject expectedPetObject = world.getPetObject();
-        JSONObject actualPetObject = petStoreApiClient.getPetById((Integer) expectedPetObject.get("id"));
-        ObjectMapper objectMapper = new ObjectMapper();
-        JsonNode expectedPet;
-        JsonNode actualPet;
-        try {
-            expectedPet = objectMapper.readTree(expectedPetObject.toString());
-            actualPet = objectMapper.readTree(actualPetObject.toString());
-        } catch (JsonProcessingException e) {
-            throw new IllegalStateException("");
-        }
+        JSONObject expectedPet = world.getPetObject();
+        JSONObject actualPet = petStoreApiClient.getPetById((Integer) expectedPet.get("id"));
 
-        assertThat(actualPet).withFailMessage("Expected pet object: " + expectedPetObject.toString()
-                + " Actual pet object: " + actualPetObject).isEqualTo(expectedPet);
+        assertThat(actualPet.toString()).withFailMessage("Expected pet object: "
+            + expectedPet.toString() + " Actual pet object: " + actualPet)
+            .isEqualTo(expectedPet.toString());
     }
 
     @Then("the pet is not listed in the pet store")
