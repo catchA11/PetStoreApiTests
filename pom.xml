@@ -183,8 +183,12 @@
             <version>1.2.5</version>
             <scope>test</scope>
         </dependency>
-
-
+        <!-- https://mvnrepository.com/artifact/com.puppycrawl.tools/checkstyle -->
+        <dependency>
+            <groupId>com.puppycrawl.tools</groupId>
+            <artifactId>checkstyle</artifactId>
+            <version>10.8.0</version>
+        </dependency>
     </dependencies>
 
 
