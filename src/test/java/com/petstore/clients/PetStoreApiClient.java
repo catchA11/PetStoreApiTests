@@ -12,7 +12,7 @@ import com.petstore.utils.JsonParser;
 import static io.restassured.RestAssured.given;
 
 public class PetStoreApiClient {
-    private static final Logger log = LoggerFactory.getLogger(PetStoreApiClient.class);
+    private static final Logger LOG = LoggerFactory.getLogger(PetStoreApiClient.class);
     private static final String BASE_URL = "https://petstore.swagger.io/v2/pet";
     private final static String FIND_BY_STATUS = "/findByStatus";
 
@@ -21,8 +21,8 @@ public class PetStoreApiClient {
         JSONArray jsonArray;
         Response response = given().param("status", status.getStatus()).when().get(BASE_URL + FIND_BY_STATUS);
         if (response.statusCode() == ResponseCodes.OK.getCode()) {
-            log.info("PetStore API request not successful. Response Code: " + response.statusCode());
-            log.info("Response being generated from __files/pets.json ");
+            LOG.info("PetStore API request not successful. Response Code: " + response.statusCode());
+            LOG.info("Response being generated from __files/pets.json ");
             JsonParser jsonParser = new JsonParser();
             JsonFilters jsonFilters = new JsonFilters();
             jsonArray = jsonFilters

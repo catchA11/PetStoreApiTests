@@ -15,7 +15,7 @@ import java.util.Random;
 
 public class JsonParser {
     public JSONArray jsonArray;
-    private static final Logger log = LoggerFactory.getLogger(JsonFilters.class);
+    private static final Logger LOG = LoggerFactory.getLogger(JsonFilters.class);
 
     public JSONArray setJSON(String path) {
         File jsonFile = new File(System.getProperty("user.dir") + "/src/test/resources/" + path);
@@ -24,7 +24,7 @@ public class JsonParser {
             inputStream = new FileInputStream(jsonFile);
         }
         catch (FileNotFoundException e) {
-            log.error("pets.json file not found at " + jsonFile);
+            LOG.error("pets.json file not found at " + jsonFile);
             e.printStackTrace();
         }
         JSONTokener jsonTokener = null;
@@ -44,7 +44,7 @@ public class JsonParser {
             inputStream = new FileInputStream(jsonFile);
         }
         catch (FileNotFoundException e) {
-            log.error("pets.json file not found at " + jsonFile);
+            LOG.error("pets.json file not found at " + jsonFile);
             e.printStackTrace();
         }
         JSONTokener jsonTokener = null;

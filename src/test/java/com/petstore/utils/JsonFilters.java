@@ -6,10 +6,8 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Iterator;
-
 public class JsonFilters {
-    private static final Logger log = LoggerFactory.getLogger(JsonFilters.class);
+    private static final Logger LOG = LoggerFactory.getLogger(JsonFilters.class);
 
     public JSONArray filterPetsByType(String name, JSONArray jsonArray) {
         return getFilteredArray("name", name, jsonArray);
@@ -29,7 +27,7 @@ public class JsonFilters {
                     filteredArray.put(petObject);
                 }
             } catch (JSONException e) {
-                log.info("field :" + field + " not found for pet: " + petObject.toString());
+                LOG.info("field :" + field + " not found for pet: " + petObject.toString());
             }
         }
         return filteredArray;
